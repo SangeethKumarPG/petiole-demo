@@ -10,6 +10,7 @@ import { DisableDraftMode } from "@/components/DisableDraftMode";
 
 import { Quicksand } from "next/font/google";
 import Footer from "@/components/Footer";
+import ChatWidget from "@/components/ChatWidget";
 // import { get } from "http";
 // import { getAllCategories } from "@/sanity/lib/products/getAllCategories";
 
@@ -49,6 +50,7 @@ export default async function RootLayout({
             <Footer />  
           </footer>
           <SanityLive />
+          <ChatWidget/>
         </body>
       </html>
     </ClerkProvider>
