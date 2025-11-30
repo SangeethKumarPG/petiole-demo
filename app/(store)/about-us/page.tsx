@@ -5,7 +5,6 @@ import Image from "next/image";
 export default function AboutPage(): JSX.Element {
   return (
     <main className="min-h-screen bg-brand-dark text-brand-text">
-      
       {/* Hero Section */}
       <section className="relative h-[50vh] w-full flex items-center justify-center overflow-hidden">
         <Image
@@ -36,12 +35,13 @@ export default function AboutPage(): JSX.Element {
         <div className="flex-1 space-y-6">
           <h2 className="text-3xl font-bold text-brand-gold">Our Story</h2>
           <p className="text-lg text-brand-muted leading-relaxed">
-            Petiole was born from a passion for effortless style — a belief that 
+            Petiole was born from a passion for effortless style — a belief that
             luxury should feel natural, comfortable, and deeply personal.
           </p>
           <p className="text-brand-text leading-relaxed">
-            We curate modern Indian fashion that blends tradition with contemporary elegance. 
-            Every product is hand-picked to bring out your individuality, your grace, and your presence.
+            We curate modern Indian fashion that blends tradition with
+            contemporary elegance. Every product is hand-picked to bring out
+            your individuality, your grace, and your presence.
           </p>
         </div>
       </section>
@@ -59,7 +59,8 @@ export default function AboutPage(): JSX.Element {
                 Quality
               </h3>
               <p className="text-brand-muted">
-                Every piece is carefully selected to ensure premium craftsmanship and lasting comfort.
+                Every piece is carefully selected to ensure premium
+                craftsmanship and lasting comfort.
               </p>
             </div>
 
@@ -68,7 +69,8 @@ export default function AboutPage(): JSX.Element {
                 Authenticity
               </h3>
               <p className="text-brand-muted">
-                A blend of modern aesthetics and timeless Indian heritage—curated with honesty.
+                A blend of modern aesthetics and timeless Indian
+                heritage—curated with honesty.
               </p>
             </div>
 
@@ -77,7 +79,8 @@ export default function AboutPage(): JSX.Element {
                 You First
               </h3>
               <p className="text-brand-muted">
-                We design experiences around your comfort, confidence, and unique personal style.
+                We design experiences around your comfort, confidence, and
+                unique personal style.
               </p>
             </div>
           </div>
@@ -85,7 +88,7 @@ export default function AboutPage(): JSX.Element {
       </section>
 
       {/* Team Section */}
-      <section className="container mx-auto py-16 px-6 text-center">
+      {/*<section className="container mx-auto py-16 px-6 text-center">
         <h2 className="text-3xl font-bold text-brand-gold mb-10">Meet the Team</h2>
 
         <div className="flex flex-col sm:flex-row justify-center gap-10">
@@ -113,7 +116,7 @@ export default function AboutPage(): JSX.Element {
             <p className="text-brand-muted text-sm">Brand Stylist</p>
           </div>
         </div>
-      </section>
+      </section>*/}
 
       {/* CTA Section */}
       <section className="bg-brand-gold py-12 text-center">
@@ -121,7 +124,8 @@ export default function AboutPage(): JSX.Element {
           Join the Petiole Family
         </h2>
         <p className="text-brand-dark text-lg mb-6">
-          Be the first to know about new arrivals, exclusive collections, and offers.
+          Be the first to know about new arrivals, exclusive collections, and
+          offers.
         </p>
 
         <a

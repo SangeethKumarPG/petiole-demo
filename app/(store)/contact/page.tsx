@@ -84,8 +84,9 @@ export default function ContactPage() {
               Our Office
             </h3>
             <p className="text-brand-muted mt-2">
-              Petiole Boutique HQ  
-              <br /> Kochi, Kerala
+              Petiole   
+              <br /> Al Kazana Centre, Near Karama Park, Al Karama Dubai
+              <br/> <a href="tel:+971 4 298 3828" className="text-brand-gold">📞 Phone</a>
             </p>
           </div>
 
