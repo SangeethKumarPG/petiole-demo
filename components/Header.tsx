@@ -64,11 +64,11 @@ export default function Header(): JSX.Element {
           <Link href="/contact" className="hover:text-brand-lime transition">
             Contact Us
           </Link>
-          <Link href="/newarrivals" className="hover:text-brand-lime transition">
+          <Link href="/categories/new-arrivals" className="hover:text-brand-lime transition">
             New Arrivals
           </Link>
           <Link
-            href="/topcollections"
+            href="/categories/topcollections"
             className="hover:text-brand-lime transition"
           >
             Top Collections
