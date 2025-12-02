@@ -45,7 +45,7 @@ export default function Footer(): JSX.Element {
           <ul className="space-y-2 text-sm">
             <li><Link href="/help" className="hover:text-brand-lime transition">Help Center</Link></li>
             <li><Link href="/shipping" className="hover:text-brand-lime transition">Shipping Info</Link></li>
-            <li><Link href="/returns" className="hover:text-brand-lime transition">Returns & Refunds</Link></li>
+            <li><Link href="/policies" className="hover:text-brand-lime transition">Refund Policy</Link></li>
             <li><Link href="/contact" className="hover:text-brand-lime transition">Contact Us</Link></li>
           </ul>
         </div>

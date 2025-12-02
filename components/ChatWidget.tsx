@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Step = "main" | "skinTone" | "occasion";
 
@@ -9,16 +9,14 @@ function renderResponse(text: string) {
   const boldRegex = /\*\*(.*?)\*\*/g;
 
   return text.split("\n").map((line, i) => {
-    // eslint-disable-next-line prefer-const
-    let formattedLine: (string | JSX.Element)[] = [];
+    const parts: Array<string | JSX.Element> = [];
 
     const urlSplit = line.split(urlRegex);
-
     urlSplit.forEach((part, idx) => {
       if (urlRegex.test(part)) {
-        formattedLine.push(
+        parts.push(
           <a
-            key={idx}
+            key={`url-${idx}`}
             href={part}
             target="_blank"
             rel="noopener noreferrer"
@@ -29,16 +27,15 @@ function renderResponse(text: string) {
         );
       } else {
         const segments = part.split(boldRegex);
-
         segments.forEach((seg, j) => {
           if (j % 2 === 1) {
-            formattedLine.push(
+            parts.push(
               <strong key={`b-${j}`} className="font-semibold">
                 {seg}
               </strong>
             );
           } else {
-            formattedLine.push(<span key={`t-${j}`}>{seg}</span>);
+            parts.push(<span key={`t-${j}`}>{seg}</span>);
           }
         });
       }
@@ -46,44 +43,73 @@ function renderResponse(text: string) {
 
     return (
       <p key={i} className="mb-1">
-        {formattedLine}
+        {parts}
       </p>
     );
   });
 }
 
-export default function ChatWidget() {
+export default function ChatWidget(): JSX.Element {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<Step>("main");
   const [response, setResponse] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowTooltip(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const sendMessage = async (msg: string) => {
     setLoading(true);
     setResponse("");
-
     try {
-      const res = await fetch("https://petiole-demo-2.pgsangeethkumar.workers.dev/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: msg }),
-      });
-
-      const data = await res.json();
+      const res = await fetch(
+        "https://petiole-demo-2.pgsangeethkumar.workers.dev/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: msg }),
+        }
+      );
+      const data = (await res.json()) as { response?: { response?: string } };
       setResponse(data?.response?.response ?? "No response");
     } catch {
       setResponse("Something went wrong. Please try again.");
     }
-
     setLoading(false);
   };
 
-  const skinTones = ["Fair", "Light", "Medium", "Wheatish", "Tan", "Brown", "Dark"];
-  const occasions = ["Office", "Interview", "Party", "Wedding", "Date", "Casual Outing", "Festival"];
+  const skinTones = [
+    "Fair",
+    "Light",
+    "Medium",
+    "Wheatish",
+    "Tan",
+    "Brown",
+    "Dark",
+  ] as const;
+
+  const occasions = [
+    "Office",
+    "Interview",
+    "Party",
+    "Wedding",
+    "Date",
+    "Casual Outing",
+    "Festival",
+  ] as const;
 
   return (
     <>
+      {showTooltip && (
+        <div className="fixed bottom-24 right-6 bg-black text-white text-sm py-2 px-3 rounded-lg shadow-lg animate-fadeInOut z-50">
+          Assistant
+        </div>
+      )}
+
       <button
         onClick={() => {
           setOpen(!open);
@@ -133,7 +159,6 @@ export default function ChatWidget() {
 
           {step === "skinTone" && (
             <div className="flex flex-col gap-2">
-              <p className="text-sm font-medium">Select your Skin Tone:</p>
               {skinTones.map((tone) => (
                 <button
                   key={tone}
@@ -157,8 +182,6 @@ export default function ChatWidget() {
 
           {step === "occasion" && (
             <div className="flex flex-col gap-2">
-              <p className="text-sm font-medium">Select an Occasion:</p>
-
               {occasions.map((occ) => (
                 <button
                   key={occ}
@@ -171,7 +194,6 @@ export default function ChatWidget() {
                   {occ}
                 </button>
               ))}
-
               <button
                 onClick={() => setStep("main")}
                 className="text-sm text-blue-600 underline mt-1"

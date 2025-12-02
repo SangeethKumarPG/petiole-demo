@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
 import "../globals.css";
-
 import { ClerkProvider } from "@clerk/nextjs";
 import Header from "@/components/Header";
 import { SanityLive } from "@/sanity/lib/live";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { draftMode } from "next/headers";
 import { DisableDraftMode } from "@/components/DisableDraftMode";
-
 import { Quicksand } from "next/font/google";
 import Footer from "@/components/Footer";
 import ChatWidget from "@/components/ChatWidget";
-// import { get } from "http";
-// import { getAllCategories } from "@/sanity/lib/products/getAllCategories";
+import WhatsAppButton from "@/components/WhatsappButton";
 
 const quicksand = Quicksand({
   subsets: ["latin"],
@@ -23,44 +20,47 @@ const quicksand = Quicksand({
 export const metadata: Metadata = {
   metadataBase: new URL("https://petiolefashion.com"),
   title: {
-    default: "Petiole Fashion | Online Women's Fashion Boutique",
+    default: "Best Boutique in Dubai | Petiole Fashion",
     template: "%s | Petiole Fashion",
   },
   description:
-    "Petiole Fashion is a modern women's fashion boutique offering dresses, co-ords, tops and party wear outfits online in India. Discover stylish, comfortable looks for every occasion.",
+    "Petiole Fashion is a leading women's boutique offering stylish dresses, co-ords, tops, party wear, and designer outfits. One of the best boutiques in Dubai for trendy women's clothing.",
   keywords: [
+    "Best boutique in Dubai",
+    "Dubai ladies boutique",
+    "Women’s boutique Dubai",
+    "Designer dresses Dubai",
     "Petiole Fashion",
-    "online fashion boutique",
-    "women's clothing boutique",
-    "women's dresses online",
-    "co-ord sets for women",
-    "party wear dresses",
-    "western wear for women",
-    "fashion boutique in India",
+    "Dubai fashion boutique",
+    "Ladies clothing Dubai",
+    "Boutique online Dubai",
+    "Party wear Dubai",
+    "Co-ord sets Dubai",
+    "Western wear Dubai"
   ],
   openGraph: {
-    title: "Petiole Fashion | Online Women's Fashion Boutique",
+    title: "Best Boutique in Dubai | Petiole Fashion",
     description:
-      "Shop trendy dresses, co-ords, tops and party wear outfits at Petiole Fashion. Stylish women's clothing boutique with curated collections for every occasion.",
+      "Shop premium women's fashion at Petiole Fashion. A top boutique in Dubai offering designer dresses, co-ords, western wear and party wear for all occasions.",
     url: "https://petiolefashion.com",
     siteName: "Petiole Fashion",
     images: [
       {
-        url: "/Petiole.png", 
+        url: "/Petiole.png",
         width: 1200,
         height: 630,
         alt: "Petiole Fashion boutique banner",
       },
     ],
-    locale: "en_IN",
+    locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Petiole Fashion | Online Women's Fashion Boutique",
+    title: "Best Boutique in Dubai | Petiole Fashion",
     description:
-      "Discover trendy women's outfits, dresses and co-ords at Petiole Fashion.",
-    images: ["/og-image.jpg"],
+      "Discover stylish women's outfits, dresses and co-ords from Dubai’s top boutique.",
+    images: ["/Petiole.png"],
   },
   icons: {
     icon: "/favicon.ico",
@@ -80,13 +80,11 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const categories = await getAllCategories();
   return (
     <ClerkProvider dynamic>
       <html lang="en" className={quicksand.variable}>
@@ -102,11 +100,14 @@ export default async function RootLayout({
             <Header />
             {children}
           </main>
+
           <footer>
-            <Footer />  
+            <Footer />
           </footer>
+
           <SanityLive />
-          <ChatWidget/>
+          <ChatWidget />
+          <WhatsAppButton />
         </body>
       </html>
     </ClerkProvider>

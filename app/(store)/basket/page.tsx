@@ -13,6 +13,7 @@ import {
   Metadata,
 } from "@/actions/createCheckoutSession";
 import { formatCurrency } from "@/lib/formatCurrency"; // ✅ Added
+import Link from "next/link";
 
 type ShippingAddress = {
   fullName: string;
@@ -127,7 +128,7 @@ export default function BasketPage() {
   return (
     <div className="container mx-auto p-4 max-w-6xl">
       <h1 className="text-2xl font-bold mb-4">Your Basket</h1>
-
+      <p className="text-black">Click here to see our <Link className="animate-pulse text-red-700 font-bold text-lg" href="/policies">Refund Policy</Link></p>
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="flex-grow">
           {groupedItems.map((item, idx) => {
