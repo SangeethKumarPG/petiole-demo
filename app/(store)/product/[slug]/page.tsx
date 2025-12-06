@@ -29,12 +29,14 @@ export type FetchedProduct = {
   _updatedAt: string;
   _rev: string;
   name: string;
-  slug?: { current?: string };
+  slug?: { _type?: "slug"; current?: string };
   price: number;
+  discountPercentage?: number;
   description?: PortableTextBlock[];
   image?: SanityImageSource;
   variants?: Variant[];
 };
+
 
 function urlFor(source: SanityImageSource) {
   const builder = imageUrlBuilder(client);

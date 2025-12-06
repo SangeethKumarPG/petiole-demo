@@ -1002,6 +1002,13 @@
         },
         "optional": true
       },
+      "discountPercentage": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "number"
+        },
+        "optional": true
+      },
       "categories": {
         "type": "objectAttribute",
         "value": {

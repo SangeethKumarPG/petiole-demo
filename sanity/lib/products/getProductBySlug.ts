@@ -6,22 +6,17 @@ export const getProductBySlug = async (slug: string) => {
     *[_type == "product" && slug.current == $slug][0]{
       _id,
       name,
+      slug,
       price,
+      discountPercentage,
       description,
       image,
-      
-      // Fetch color variants properly
       variants[]{
         colorName,
         colorImage{
-          asset->{
-            _id,
-            url
-          }
+          asset->{ _id, url }
         },
-        stock,                 // color-level stock
-
-        // size objects: { size, stock }
+        stock,
         sizes[]{
           size,
           stock

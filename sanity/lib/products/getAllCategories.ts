@@ -10,3 +10,4 @@ export const getAllCategories = async ()=>{
         return [];
     }
 }
+export type AllCategoriesResult = Awaited<ReturnType<typeof getAllCategories>>;

@@ -7,6 +7,7 @@ import { PortableText, PortableTextComponents } from "next-sanity";
 import type { ImageCrop, ImageHotspot } from "sanity";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { imageUrl } from "@/lib/imageUrl";
+import { getFinalPrice } from "@/lib/pricing";
 import {
   Dialog,
   DialogContent,
@@ -148,11 +149,23 @@ export default function ProductClientUI({
           <h1 className="text-3xl font-bold text-brand-text">
             {product.name}
           </h1>
-
-          <p className="text-2xl font-semibold text-brand-gold mt-2">
-            {product.price} AED
-          </p>
+        
+          {product.discountPercentage && product.discountPercentage > 0 ? (
+            <div className="mt-2 flex flex-col">
+              <span className="text-lg text-gray-400 line-through">
+                {product.price} AED
+              </span>
+              <span className="text-2xl font-semibold text-brand-gold">
+                {getFinalPrice(product)} AED
+              </span>
+            </div>
+          ) : (
+            <p className="text-2xl font-semibold text-brand-gold mt-2">
+              {product.price} AED
+            </p>
+          )}
         </div>
+
 
         <div>
           <h3 className="font-semibold mb-2 text-lg text-brand-text">

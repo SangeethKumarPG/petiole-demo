@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Loader from "@/components/Loader";
 import { useEffect, useState } from "react";
+import { getFinalPrice } from "@/lib/pricing";
+
 import {
   createCheckoutSession,
   Metadata,
@@ -128,20 +130,28 @@ export default function BasketPage() {
   return (
     <div className="container mx-auto p-4 max-w-6xl">
       <h1 className="text-2xl font-bold mb-4">Your Basket</h1>
-      <p className="text-black">Click here to see our <Link className="animate-pulse text-red-700 font-bold text-lg" href="/policies">Refund Policy</Link></p>
+      <p className="text-black">
+        Click here to see our{" "}
+        <Link
+          className="animate-pulse text-red-700 font-bold text-lg"
+          href="/policies"
+        >
+          Refund Policy
+        </Link>
+      </p>
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="flex-grow">
           {groupedItems.map((item, idx) => {
             const product = item.product;
             const variant = product.variants?.find(
-              (v) => v.colorName === product.selectedColor
+              (v) => v.colorName === product.selectedColor,
             );
 
             const imageSrc = variant?.colorImage
               ? imageUrl(variant.colorImage).url()
               : product.image
-              ? imageUrl(product.image).url()
-              : "/placeholder.png";
+                ? imageUrl(product.image).url()
+                : "/placeholder.png";
 
             return (
               <div
@@ -176,7 +186,7 @@ export default function BasketPage() {
 
                     {/* ✅ price formatting updated */}
                     <p className="text-sm font-bold mt-2">
-                      {formatCurrency((product.price ?? 0) * item.quantity)}
+                      {formatCurrency(getFinalPrice(product) * item.quantity)}
                     </p>
                   </div>
                 </div>

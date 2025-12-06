@@ -169,6 +169,7 @@ export type Product = {
   };
   description?: BlockContent;
   price?: number;
+  discountPercentage?: number;
   categories?: Array<{
     _ref: string;
     _type: "reference";
@@ -402,16 +403,14 @@ export type ALL_CATEGORIES_QUERYResult = Array<{
 
 // Source: ./sanity/lib/products/getAllProducts.ts
 // Variable: ALL_PRODUCTS_QUERY
-// Query: *[_type == "product"] | order(name asc)
+// Query: *[_type == "product"] | order(name asc){      _id,      name,      slug,      price,      discountPercentage,      image,      variants[]{        colorName,        colorImage{          asset->{ _id, url }        },        stock,        sizes[]{          size,          stock        }      }    }
 export type ALL_PRODUCTS_QUERYResult = Array<{
   _id: string;
-  _type: "product";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
-  image?: {
+  name: string | null;
+  slug: Slug | null;
+  price: number | null;
+  discountPercentage: number | null;
+  image: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -422,53 +421,33 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
-  };
-  description?: BlockContent;
-  price?: number;
-  categories?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }>;
-  variants?: Array<{
-    colorName?: string;
-    colorImage?: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      _type: "image";
-    };
-    stock?: number;
-    sizes?: Array<{
-      size?: string;
-      stock?: number;
-      _key: string;
-    }>;
-    _type: "colorVariant";
-    _key: string;
-  }>;
+  } | null;
+  variants: Array<{
+    colorName: string | null;
+    colorImage: {
+      asset: {
+        _id: string;
+        url: string | null;
+      } | null;
+    } | null;
+    stock: number | null;
+    sizes: Array<{
+      size: string | null;
+      stock: number | null;
+    }> | null;
+  }> | null;
 }>;
 
 // Source: ./sanity/lib/products/getProductByCategory.ts
 // Variable: PRODUCTS_BY_CATEGORY_QUERY
-// Query: *[_type == "product" && references(*[_type == "category" && slug.current == $slug]._id)]     | order(name asc)
+// Query: *[_type == "product" && references(*[_type == "category" && slug.current == $slug]._id)]    | order(name asc){      _id,      name,      slug,      price,      discountPercentage,      image,      variants[]{        colorName,        colorImage{          asset->{ _id, url }        },        stock,        sizes[]{          size,          stock        }      }    }
 export type PRODUCTS_BY_CATEGORY_QUERYResult = Array<{
   _id: string;
-  _type: "product";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
-  image?: {
+  name: string | null;
+  slug: Slug | null;
+  price: number | null;
+  discountPercentage: number | null;
+  image: {
     asset?: {
       _ref: string;
       _type: "reference";
@@ -479,48 +458,32 @@ export type PRODUCTS_BY_CATEGORY_QUERYResult = Array<{
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
-  };
-  description?: BlockContent;
-  price?: number;
-  categories?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }>;
-  variants?: Array<{
-    colorName?: string;
-    colorImage?: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      _type: "image";
-    };
-    stock?: number;
-    sizes?: Array<{
-      size?: string;
-      stock?: number;
-      _key: string;
-    }>;
-    _type: "colorVariant";
-    _key: string;
-  }>;
+  } | null;
+  variants: Array<{
+    colorName: string | null;
+    colorImage: {
+      asset: {
+        _id: string;
+        url: string | null;
+      } | null;
+    } | null;
+    stock: number | null;
+    sizes: Array<{
+      size: string | null;
+      stock: number | null;
+    }> | null;
+  }> | null;
 }>;
 
 // Source: ./sanity/lib/products/getProductBySlug.ts
 // Variable: PRODUCT_BY_SLUG_QUERY
-// Query: *[_type == "product" && slug.current == $slug][0]{      _id,      name,      price,      description,      image,            // Fetch color variants properly      variants[]{        colorName,        colorImage{          asset->{            _id,            url          }        },        stock,                 // color-level stock        // size objects: { size, stock }        sizes[]{          size,          stock        }      }    }
+// Query: *[_type == "product" && slug.current == $slug][0]{      _id,      name,      slug,      price,      discountPercentage,      description,      image,      variants[]{        colorName,        colorImage{          asset->{ _id, url }        },        stock,        sizes[]{          size,          stock        }      }    }
 export type PRODUCT_BY_SLUG_QUERYResult = {
   _id: string;
   name: string | null;
+  slug: Slug | null;
   price: number | null;
+  discountPercentage: number | null;
   description: BlockContent | null;
   image: {
     asset?: {
@@ -575,6 +538,7 @@ export type SEARCH_PRODUCTS_BY_COLOR_QUERYResult = Array<{
   };
   description?: BlockContent;
   price?: number;
+  discountPercentage?: number;
   categories?: Array<{
     _ref: string;
     _type: "reference";
@@ -632,6 +596,7 @@ export type PRODUCT_SEARCH_QUERYResult = Array<{
   };
   description?: BlockContent;
   price?: number;
+  discountPercentage?: number;
   categories?: Array<{
     _ref: string;
     _type: "reference";
@@ -688,9 +653,9 @@ declare module "@sanity/client" {
   interface SanityQueries {
     "\n    *[_type == \"orders\" && clerkUserId == $userId]\n      | order(orderDate desc) {\n        _id,\n        orderNumber,\n        clerkUserId,\n        customerName,\n        email,\n        stripeCheckoutSessionId,\n        stripePaymentIntentId,\n        stripeCustomerId,\n        currency,\n        status,\n        totalPrice,\n        amountDiscount,\n        orderDate,\n  \n        shippingAddress {\n          fullName,\n          street1,\n          street2,\n          city,\n          state,\n          postalCode,\n          country,\n          phone\n        },\n  \n        products[] {\n          quantity,\n          selectedColor,\n          selectedSize,\n          product->{\n            _id,\n            name,\n            price,\n            image,\n            \"slug\": slug.current,\n            variants\n          }\n        }\n      }\n  ": MY_ORDERS_QUERYResult;
     "*[_type == \"category\"] | order(name asc)": ALL_CATEGORIES_QUERYResult;
-    "\n        *[_type == \"product\"] | order(name asc)\n        ": ALL_PRODUCTS_QUERYResult;
-    "\n    *[_type == \"product\" && references(*[_type == \"category\" && slug.current == $slug]._id)] \n    | order(name asc)\n  ": PRODUCTS_BY_CATEGORY_QUERYResult;
-    "\n    *[_type == \"product\" && slug.current == $slug][0]{\n      _id,\n      name,\n      price,\n      description,\n      image,\n      \n      // Fetch color variants properly\n      variants[]{\n        colorName,\n        colorImage{\n          asset->{\n            _id,\n            url\n          }\n        },\n        stock,                 // color-level stock\n\n        // size objects: { size, stock }\n        sizes[]{\n          size,\n          stock\n        }\n      }\n    }\n  ": PRODUCT_BY_SLUG_QUERYResult;
+    "\n    *[_type == \"product\"] | order(name asc){\n      _id,\n      name,\n      slug,\n      price,\n      discountPercentage,\n      image,\n      variants[]{\n        colorName,\n        colorImage{\n          asset->{ _id, url }\n        },\n        stock,\n        sizes[]{\n          size,\n          stock\n        }\n      }\n    }\n  ": ALL_PRODUCTS_QUERYResult;
+    "\n    *[_type == \"product\" && references(*[_type == \"category\" && slug.current == $slug]._id)]\n    | order(name asc){\n      _id,\n      name,\n      slug,\n      price,\n      discountPercentage,\n      image,\n      variants[]{\n        colorName,\n        colorImage{\n          asset->{ _id, url }\n        },\n        stock,\n        sizes[]{\n          size,\n          stock\n        }\n      }\n    }\n  ": PRODUCTS_BY_CATEGORY_QUERYResult;
+    "\n    *[_type == \"product\" && slug.current == $slug][0]{\n      _id,\n      name,\n      slug,\n      price,\n      discountPercentage,\n      description,\n      image,\n      variants[]{\n        colorName,\n        colorImage{\n          asset->{ _id, url }\n        },\n        stock,\n        sizes[]{\n          size,\n          stock\n        }\n      }\n    }\n  ": PRODUCT_BY_SLUG_QUERYResult;
     "\n  *[\n    _type == \"product\" &&\n    count(\n      variants[\n        lower(string(colorName)) match $color\n      ]\n    ) > 0\n  ] | order(name asc)\n": SEARCH_PRODUCTS_BY_COLOR_QUERYResult;
     "\n        *[_type == \"product\" &&  name match $searchParameter] | order(name asc)\n        ": PRODUCT_SEARCH_QUERYResult;
     "\n        *[_type==\"sale\" && isActive==true && couponCode==$couponCode] | order(validFrom desc)[0]": ACTIVE_SALEBY_COUPON_QUERYResult;

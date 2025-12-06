@@ -1,6 +1,7 @@
 import { Product } from "@/sanity.types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { getFinalPrice } from "@/lib/pricing";
 
 export interface BasketItem {
   product: Product & {
@@ -12,11 +13,25 @@ export interface BasketItem {
 
 interface BasketState {
   items: BasketItem[];
-  addItem: (product: Product & { selectedColor?: string | null; selectedSize?: string | null }) => void;
-  removeItem: (product: Product & { selectedColor?: string | null; selectedSize?: string | null }) => void;
+  addItem: (
+    product: Product & {
+      selectedColor?: string | null;
+      selectedSize?: string | null;
+    },
+  ) => void;
+  removeItem: (
+    product: Product & {
+      selectedColor?: string | null;
+      selectedSize?: string | null;
+    },
+  ) => void;
   clearBasket: () => void;
   getTotalPrice: () => number;
-  getItemCount: (productId: string, color?: string | null, size?: string | null) => number;
+  getItemCount: (
+    productId: string,
+    color?: string | null,
+    size?: string | null,
+  ) => number;
   getGroupedItems: () => BasketItem[];
 }
 
@@ -40,13 +55,16 @@ export const useBasketStore = create<BasketState>()(
             (item) =>
               item.product._id === product._id &&
               item.product.selectedColor === selectedColor &&
-              item.product.selectedSize === selectedSize
+              item.product.selectedSize === selectedSize,
           );
 
           if (existingItem) {
             const newQuantity = existingItem.quantity + 1;
 
-            if ((sizeInfo && newQuantity > (sizeInfo.stock ?? 0)) || (!sizeInfo && newQuantity > (variant.stock ?? 0))) {
+            if (
+              (sizeInfo && newQuantity > (sizeInfo.stock ?? 0)) ||
+              (!sizeInfo && newQuantity > (variant.stock ?? 0))
+            ) {
               return state;
             }
 
@@ -56,7 +74,7 @@ export const useBasketStore = create<BasketState>()(
                 item.product.selectedColor === selectedColor &&
                 item.product.selectedSize === selectedSize
                   ? { ...item, quantity: newQuantity }
-                  : item
+                  : item,
               ),
             };
           }
@@ -87,16 +105,18 @@ export const useBasketStore = create<BasketState>()(
         })),
 
       clearBasket: () => set({ items: [] }),
-
       getTotalPrice: () =>
-        get().items.reduce((total, item) => total + (item.product.price ?? 0) * item.quantity, 0),
+        get().items.reduce(
+          (total, item) => total + getFinalPrice(item.product) * item.quantity,
+          0,
+        ),
 
       getItemCount: (productId, color = null, size = null) => {
         const item = get().items.find(
           (item) =>
             item.product._id === productId &&
             item.product.selectedColor === color &&
-            item.product.selectedSize === size
+            item.product.selectedSize === size,
         );
         return item ? item.quantity : 0;
       },
@@ -105,6 +125,6 @@ export const useBasketStore = create<BasketState>()(
     }),
     {
       name: "basket-store",
-    }
-  )
+    },
+  ),
 );

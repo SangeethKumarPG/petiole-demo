@@ -1,8 +1,9 @@
 "use server";
 
 import { imageUrl } from "@/lib/imageUrl";
-import { BasketItem } from "@/lib/store/store";
 import stripe from "@/lib/stripe";
+import { getFinalPrice } from "@/lib/pricing";
+import { BasketItem } from "@/lib/store/store";
 
 export type Metadata = {
   orderNumber: string;
@@ -57,25 +58,28 @@ export async function createCheckoutSession(
     allow_promotion_codes: true,
     success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}&orderNumber=${metadata.orderNumber}`,
     cancel_url: `${baseUrl}/basket`,
-    line_items: items.map((item) => ({
-      quantity: item.quantity,
-      price_data: {
-        currency: "aed",
-        unit_amount: Math.round(item.product.price! * 100),
-        product_data: {
-          name: item.product.name ?? "Unnamed Product",
-          description: `Color: ${item.product.selectedColor} | Size: ${item.product.selectedSize}`,
-          metadata: {
-            id: item.product._id,
-            color: item.product.selectedColor || "",
-            size: item.product.selectedSize || "",
+    line_items: items.map((item) => {
+      const unitPrice = getFinalPrice(item.product);
+      return {
+        quantity: item.quantity,
+        price_data: {
+          currency: "aed",
+          unit_amount: Math.round(unitPrice * 100),
+          product_data: {
+            name: item.product.name ?? "Unnamed Product",
+            description: `Color: ${item.product.selectedColor} | Size: ${item.product.selectedSize}`,
+            metadata: {
+              id: item.product._id,
+              color: item.product.selectedColor || "",
+              size: item.product.selectedSize || "",
+            },
+            images: item.product.image
+              ? [imageUrl(item.product.image).url()]
+              : [],
           },
-          images: item.product.image
-            ? [imageUrl(item.product.image).url()]
-            : [],
         },
-      },
-    })),
+      };
+    }),
   });
 
   return session.url;
