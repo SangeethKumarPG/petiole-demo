@@ -10,9 +10,10 @@ import { EffectFade, Autoplay, Pagination } from "swiper/modules";
 
 export default function HeroSection(): JSX.Element {
   const slides: ReadonlyArray<string> = [
-    "/hero-model.png",
-    "/hero-2.png",
-    "/hero-3.png",
+    "/carousel-1.jpg",
+    "/carousel-2.jpg",
+    "/carousel-3.jfif",
+    "/carousel-4.jpg",
   ];
 
   return (

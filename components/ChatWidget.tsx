@@ -82,15 +82,8 @@ export default function ChatWidget(): JSX.Element {
     setLoading(false);
   };
 
-  const skinTones = [
-    "Fair",
-    "Light",
-    "Medium",
-    "Wheatish",
-    "Tan",
-    "Brown",
-    "Dark",
-  ] as const;
+  // ✅ UPDATED SKIN TONES (NOW ONLY 3 OPTIONS)
+  const skinTones = ["Fair", "Medium", "Dark"] as const;
 
   const occasions = [
     "Office",
