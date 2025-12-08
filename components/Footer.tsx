@@ -47,6 +47,7 @@ export default function Footer(): JSX.Element {
             <li><Link href="/shipping" className="hover:text-brand-lime transition">Shipping Info</Link></li>
             <li><Link href="/policies" className="hover:text-brand-lime transition">Refund Policy</Link></li>
             <li><Link href="/contact" className="hover:text-brand-lime transition">Contact Us</Link></li>
+            <li><Link href="/terms" className="hover:text-brand-lime transition">Terms & Conditions</Link></li>
           </ul>
         </div>
 
