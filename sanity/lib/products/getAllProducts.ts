@@ -3,7 +3,7 @@ import { sanityFetch } from "../live";
 
 export const getAllProducts = async () => {
   const ALL_PRODUCTS_QUERY = defineQuery(`
-    *[_type == "product"] 
+    *[_type == "product"]
     | order(name asc){
       _id,
       _createdAt,
@@ -14,6 +14,9 @@ export const getAllProducts = async () => {
       price,
       discountPercentage,
       image,
+
+      description,
+
       variants[]{
         colorName,
         colorImage{
@@ -36,4 +39,5 @@ export const getAllProducts = async () => {
     return [];
   }
 };
+
 export type AllProductsResult = Awaited<ReturnType<typeof getAllProducts>>;

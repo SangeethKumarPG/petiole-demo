@@ -403,9 +403,12 @@ export type ALL_CATEGORIES_QUERYResult = Array<{
 
 // Source: ./sanity/lib/products/getAllProducts.ts
 // Variable: ALL_PRODUCTS_QUERY
-// Query: *[_type == "product"] | order(name asc){      _id,      name,      slug,      price,      discountPercentage,      image,      variants[]{        colorName,        colorImage{          asset->{ _id, url }        },        stock,        sizes[]{          size,          stock        }      }    }
+// Query: *[_type == "product"]    | order(name asc){      _id,      _createdAt,      _updatedAt,      _rev,      name,      slug,      price,      discountPercentage,      image,      description,      variants[]{        colorName,        colorImage{          asset->{ _id, url }        },        stock,        sizes[]{          size,          stock        }      }    }
 export type ALL_PRODUCTS_QUERYResult = Array<{
   _id: string;
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   name: string | null;
   slug: Slug | null;
   price: number | null;
@@ -422,6 +425,7 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
     crop?: SanityImageCrop;
     _type: "image";
   } | null;
+  description: BlockContent | null;
   variants: Array<{
     colorName: string | null;
     colorImage: {
@@ -440,9 +444,12 @@ export type ALL_PRODUCTS_QUERYResult = Array<{
 
 // Source: ./sanity/lib/products/getProductByCategory.ts
 // Variable: PRODUCTS_BY_CATEGORY_QUERY
-// Query: *[_type == "product" && references(*[_type == "category" && slug.current == $slug]._id)]    | order(name asc){      _id,      name,      slug,      price,      discountPercentage,      image,      variants[]{        colorName,        colorImage{          asset->{ _id, url }        },        stock,        sizes[]{          size,          stock        }      }    }
+// Query: *[_type == "product" && references(*[_type == "category" && slug.current == $slug]._id)]    | order(name asc){      _id,      _createdAt,      _updatedAt,      _rev,      name,      slug,      price,      discountPercentage,      image,      variants[]{        colorName,        colorImage{          asset->{ _id, url }        },        stock,        sizes[]{          size,          stock        }      }    }
 export type PRODUCTS_BY_CATEGORY_QUERYResult = Array<{
   _id: string;
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   name: string | null;
   slug: Slug | null;
   price: number | null;
@@ -653,8 +660,8 @@ declare module "@sanity/client" {
   interface SanityQueries {
     "\n    *[_type == \"orders\" && clerkUserId == $userId]\n      | order(orderDate desc) {\n        _id,\n        orderNumber,\n        clerkUserId,\n        customerName,\n        email,\n        stripeCheckoutSessionId,\n        stripePaymentIntentId,\n        stripeCustomerId,\n        currency,\n        status,\n        totalPrice,\n        amountDiscount,\n        orderDate,\n  \n        shippingAddress {\n          fullName,\n          street1,\n          street2,\n          city,\n          state,\n          postalCode,\n          country,\n          phone\n        },\n  \n        products[] {\n          quantity,\n          selectedColor,\n          selectedSize,\n          product->{\n            _id,\n            name,\n            price,\n            image,\n            \"slug\": slug.current,\n            variants\n          }\n        }\n      }\n  ": MY_ORDERS_QUERYResult;
     "*[_type == \"category\"] | order(name asc)": ALL_CATEGORIES_QUERYResult;
-    "\n    *[_type == \"product\"] | order(name asc){\n      _id,\n      name,\n      slug,\n      price,\n      discountPercentage,\n      image,\n      variants[]{\n        colorName,\n        colorImage{\n          asset->{ _id, url }\n        },\n        stock,\n        sizes[]{\n          size,\n          stock\n        }\n      }\n    }\n  ": ALL_PRODUCTS_QUERYResult;
-    "\n    *[_type == \"product\" && references(*[_type == \"category\" && slug.current == $slug]._id)]\n    | order(name asc){\n      _id,\n      name,\n      slug,\n      price,\n      discountPercentage,\n      image,\n      variants[]{\n        colorName,\n        colorImage{\n          asset->{ _id, url }\n        },\n        stock,\n        sizes[]{\n          size,\n          stock\n        }\n      }\n    }\n  ": PRODUCTS_BY_CATEGORY_QUERYResult;
+    "\n    *[_type == \"product\"]\n    | order(name asc){\n      _id,\n      _createdAt,\n      _updatedAt,\n      _rev,\n      name,\n      slug,\n      price,\n      discountPercentage,\n      image,\n\n      description,\n\n      variants[]{\n        colorName,\n        colorImage{\n          asset->{ _id, url }\n        },\n        stock,\n        sizes[]{\n          size,\n          stock\n        }\n      }\n    }\n  ": ALL_PRODUCTS_QUERYResult;
+    "\n    *[_type == \"product\" && references(*[_type == \"category\" && slug.current == $slug]._id)]\n    | order(name asc){\n      _id,\n      _createdAt,\n      _updatedAt,\n      _rev,\n      name,\n      slug,\n      price,\n      discountPercentage,\n      image,\n      variants[]{\n        colorName,\n        colorImage{\n          asset->{ _id, url }\n        },\n        stock,\n        sizes[]{\n          size,\n          stock\n        }\n      }\n    }\n  ": PRODUCTS_BY_CATEGORY_QUERYResult;
     "\n    *[_type == \"product\" && slug.current == $slug][0]{\n      _id,\n      name,\n      slug,\n      price,\n      discountPercentage,\n      description,\n      image,\n      variants[]{\n        colorName,\n        colorImage{\n          asset->{ _id, url }\n        },\n        stock,\n        sizes[]{\n          size,\n          stock\n        }\n      }\n    }\n  ": PRODUCT_BY_SLUG_QUERYResult;
     "\n  *[\n    _type == \"product\" &&\n    count(\n      variants[\n        lower(string(colorName)) match $color\n      ]\n    ) > 0\n  ] | order(name asc)\n": SEARCH_PRODUCTS_BY_COLOR_QUERYResult;
     "\n        *[_type == \"product\" &&  name match $searchParameter] | order(name asc)\n        ": PRODUCT_SEARCH_QUERYResult;

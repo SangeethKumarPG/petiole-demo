@@ -5,6 +5,7 @@ import { formatCurrency } from "@/lib/formatCurrency";
 import { getFinalPrice } from "@/lib/pricing";
 import type { ThumbnailProduct } from "@/types/thumbnail-product";
 
+
 function ProductThumbnail({ product }: { product: ThumbnailProduct }) {
   const isOutOfStock =
     product.variants?.length &&
@@ -24,18 +25,19 @@ function ProductThumbnail({ product }: { product: ThumbnailProduct }) {
   const finalPrice = getFinalPrice(safeProduct);
   const hasDiscount = (product.discountPercentage ?? 0) > 0;
 
-  // Extract plain text from PortableText safely
-  const descriptionText =
-    product.description
-      ?.map((block) => {
-        if (!block || !("children" in block)) return "";
-  
-        return (block.children ?? [])
-          .map((child) => ("text" in child && child.text ? child.text : ""))
-          .join("");
-      })
-      .join(" ") ?? "";
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const descriptionText = product.description
+    ?.filter((block: any) => block._type === "block")
+    .map((block: any) =>
+      block.children
+        ?.map((child: any) => child.text ?? "")
+        .join(" ")
+    )
+    .join(" ")
+    .slice(0, 100) + "…";
+  /* eslint-disable @typescript-eslint/no-explicit-any */
 
+  
   return (
     <Link
       href={`/product/${product.slug?.current ?? ""}`}
@@ -69,7 +71,6 @@ function ProductThumbnail({ product }: { product: ThumbnailProduct }) {
         <p className="mt-2 text-sm text-gray-600 line-clamp-2">
           {descriptionText}
         </p>
-
         {/* Price */}
         {!hasDiscount && (
           <p className="mt-2 text-lg font-bold text-gray-900">
