@@ -42,7 +42,7 @@ export default function Header(): JSX.Element {
         {/* LOGO */}
         <Link href="/" className="flex items-center gap-2">
           <Image
-            src="/petiole.png"
+            src="/Petiole.png"
             alt="Petiole Logo"
             width={40}
             height={40}
